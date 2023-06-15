@@ -40,6 +40,38 @@ export const getUsers = createAsyncThunk<User[]>(
   }
 );
 
+export const getUserById = createAsyncThunk<User, string>(
+  "users/getUserById",
+  async (id, thunkAPI) => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/users/${id}`,
+        { headers }
+      );
+
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+export const updateUser = createAsyncThunk<User, Object | any>(
+  "users/updateUser",
+  async (data, thunkAPI) => {
+    try {
+      const response = await axios.put(
+        `${process.env.REACT_APP_API_URL}/users/${data.id}`,
+        data,
+        { headers }
+      );
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
 // createSlice
 // A function that accepts an initial state, an object of reducer functions,
 // and a "slice name", and automatically generates action creators and action types
@@ -76,6 +108,17 @@ export const userSlice = createSlice({
     builder.addCase(getUsers.rejected, (state, action) => {
       state.loading = false;
       state.errors = action.payload;
+    });
+    builder.addCase(getUserById.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(getUserById.fulfilled, (state, action) => {
+      state.singleUser = action.payload;
+      state.loading = false;
+    });
+    builder.addCase(updateUser.fulfilled, (state, action) => {
+      state.singleUser = action.payload;
+      state.loading = false;
     });
   },
 });

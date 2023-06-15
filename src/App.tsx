@@ -5,6 +5,7 @@ import { useAppDispatch } from "./store/hooks";
 import { getUsers } from "./features/users/usersSlice";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import NavBar from "./components/NavBar";
+import SingleUserPage from "./features/users/SingleUserPage";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -22,6 +23,7 @@ function App() {
       <NavBar />
       <Routes>
         <Route path="/" element={<UsersPage />} />
+        <Route path="/users/:id" element={<SingleUserPage />} />
       </Routes>
     </BrowserRouter>
   );
